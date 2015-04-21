@@ -2,13 +2,15 @@
 class MarkdownIO
 
   def self.read_markdown(file)
-    File.readlines(file)
+    File.read(file)
   end
 
-  def self.write_html(output_file, html)
-    File.write(output_file, html)
-    # may need the block to count lines
-    # File.open(output_file, 'w') {|f| f.write(html.to_s) }
+  def self.write_html(output_file, converted_md)
+
+    File.open(output_file, 'w') do |file|
+    #   converted_md.each { |line| file.write(line) }
+      file.write(converted_md)
+    end
   end
 end
 

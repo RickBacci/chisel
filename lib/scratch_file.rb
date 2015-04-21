@@ -22,3 +22,14 @@
 #   |end
 # END
 # # => "def test\n  some_method\n  other_method\nend\n"
+
+
+# working for headers
+# output = output.map do |line|
+#   next unless header_regex.match(line)
+#
+#   headers = header_regex.match(line)
+#   header_size = headers[1].length
+#
+#   "<h#{header_size}>#{headers[2]}</h#{header_size}>\n"
+# end
