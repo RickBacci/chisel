@@ -16,16 +16,20 @@ class MarkdownParserTest < MiniTest::Test
     header = '# Header'
     parser = MarkdownParser.new(header)
     converted_header = parser.convert_headers
-    assert_equal "<h1>Header<h1>", converted_header
+    assert_equal "<h1>Header</h1>", converted_header
   end
 
   def test_test_it_can_convert_a_bigger_header
     header = '##### Header 5'
     parser = MarkdownParser.new(header)
     converted_header = parser.convert_headers
-    assert_equal "<h5>Header 5<h5>", converted_header
-
+    assert_equal "<h5>Header 5</h5>", converted_header
   end
-  
 
+  def test_can_find_chunks
+    chunks = "\nhello\n\nworld\n"
+    parser = MarkdownParser.new(chunks)
+    paragraph = parser.generate_paragraphs
+    assert_equal "<p>\n  hello\n</p>\n<p>\n  world\n</p>\n", paragraph
+  end
 end
