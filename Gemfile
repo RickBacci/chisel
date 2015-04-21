@@ -1,0 +1,7 @@
+source "https://rubygems.org"
+
+gem 'minitest'
+gem 'pry'
+gem 'rake'
+gem 'pry-byebug'
+gem 'redcarpet'
