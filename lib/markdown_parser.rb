@@ -14,16 +14,12 @@ class MarkdownParser
   end
 
   def convert_all
-
+    generate_paragraphs
 
     convert_headers if header_match_found?
     convert_strong if strong_match_found?
     convert_emphasis if emphasis_match_found?
     convert_ampersand if ampersand_match_found?
-
-
-      generate_paragraphs
-
   end
 
   def convert_headers
@@ -47,29 +43,31 @@ class MarkdownParser
   end
 
   def generate_paragraphs
-    get_chunks.map do |chunk|
-      if header?(chunk)
-        chunk
-      else
-        format_single_line_paragraph(chunk)
-      end
-    end.join
-  end
+     chunks = get_chunks
 
-  def get_chunks
-    markdown.split("\n\n")
-  end
+     text = chunks.map.with_index do |chunk, index|
+       if header?(chunk)
+         chunk
+       else
+         chunks[index] = format_single_line_paragraph(chunk)
+       end
+     end
 
+     @markdown = text.join("\n\n")
+  end
 
   private
 
+  def get_chunks
+    @markdown.split("\n\n")
+  end
 
   def header?(chunk)
-    chunk[0..1] == "<h"
+    chunk[0] == "#"
   end
 
   def format_single_line_paragraph(chunk)
-    "\n<p>\n  #{chunk}</p>"
+    "<p>\n  #{chunk}</p>"
   end
 
   def header_match_found?
