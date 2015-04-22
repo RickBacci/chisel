@@ -29,7 +29,7 @@ class MarkdownParserTest < MiniTest::Test
   def test_can_convert_emphasis
     em = '*emphasis*'
     parser = MarkdownParser.new(em)
-    emphasis = parser.convert_emphasis
+    emphasis = parser.convert_all
     assert_equal "<em>emphasis</em>", emphasis
   end
 
@@ -40,10 +40,17 @@ class MarkdownParserTest < MiniTest::Test
     assert_equal "<strong>strong</strong>", strong
   end
 
+  def test_can_convert_ampersand
+    amp = '&'
+    parser = MarkdownParser.new(amp)
+    ampersand = parser.convert_all
+    assert_equal "amp;", ampersand
+  end
+
   def test_can_ignore_header_chunks
     chunks = "\nhello\n\n#world\n"
     parser = MarkdownParser.new(chunks)
-    paragraph = parser.generate_paragraphs
+    paragraph = parser.convert_all
 
     html =
     %{<p>

@@ -1,11 +1,4 @@
-# * the series of convert_.. methods,
-#   move them into one method on MarkdownParser
-#   eg convert_all
-# * make the first test use convert_all instead of convert_...
-#   it will probably pass (convert_all will then call the original method)
-# * make the second test use convert_all instead of convert_...
-#   you may have integration issues with this one, but you're limiting
-#   the set of failures and complexity by doing it one test / converter at a time
+
 # * With the `["", "...", "..."]`, where the empty string was messing up
 #   the paragraphs, we can first remove it and then map it:
 #   [18] pry(main)> [1,2,3,4,5].reject { |n| n == 3 }.map { |n| n.even? }
@@ -23,17 +16,17 @@ class MarkdownParser
   def convert_all
     case markdown
 
-    when /^(#+)\s(.*)$/ #header
+    when header_match_found?
       convert_headers
-    when /\*\*(.*)\*\*/ # strong
+    when strong_match_found?
       convert_strong
-
-    when /\*(.*)\*/ #### emphsis....strong has to go first.....need better regex for this
-      #convert_emphasis
-      # when /&/
-      #   line.gsub(/&/, 'amp;') ## needs to be method calls to treat every instance in every line
+    when emphasis_match_found?
+      convert_emphasis
+    when ampersand_match_found?
+      convert_ampersand
     else
-      markdown
+      #markdown
+      generate_paragraphs
     end
   end
 
@@ -46,11 +39,15 @@ class MarkdownParser
   end
 
   def convert_emphasis
-    @markdown.gsub(/\*(.*)\*/, "<em>\\1</em>" )
+    markdown.gsub(/\*(.*)\*/, "<em>\\1</em>" )
   end
 
   def convert_strong
     markdown.gsub(/\*\*(.*)\*\*/, "<strong>\\1</strong>" )
+  end
+
+  def convert_ampersand
+    markdown.gsub('&', 'amp;')
   end
 
   def generate_paragraphs
@@ -124,6 +121,22 @@ class MarkdownParser
   #{chunk}
 </p>
 }
+  end
+
+  def header_match_found?
+    /^(#+)\s(.*)$/
+  end
+
+  def strong_match_found?
+    /\*\*(.*)\*\*/
+  end
+
+  def emphasis_match_found?
+    /\*(.*)\*/
+  end
+
+  def ampersand_match_found?
+    /&/
   end
 end
 
