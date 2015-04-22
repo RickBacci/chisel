@@ -21,8 +21,20 @@ class MarkdownParser
   end
 
   def convert_all
-    convert_headers
-    #convert_strong
+    case markdown
+
+    when /^(#+)\s(.*)$/ #header
+      convert_headers
+    when /\*\*(.*)\*\*/ # strong
+      convert_strong
+
+    when /\*(.*)\*/ #### emphsis....strong has to go first.....need better regex for this
+      #convert_emphasis
+      # when /&/
+      #   line.gsub(/&/, 'amp;') ## needs to be method calls to treat every instance in every line
+    else
+      markdown
+    end
   end
 
   def convert_headers
@@ -30,11 +42,11 @@ class MarkdownParser
     header_size = header[1].length
 
     header_tag = "<h#{header_size}>\\2</h#{header_size}>"
-    markdown.gsub(/^(#+) *(.*)/, header_tag)
+    @markdown.gsub(/^(#+) *(.*)/, header_tag)
   end
 
   def convert_emphasis
-    markdown.gsub(/\*(.*)\*/, "<em>\\1</em>" )
+    @markdown.gsub(/\*(.*)\*/, "<em>\\1</em>" )
   end
 
   def convert_strong

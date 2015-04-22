@@ -22,7 +22,7 @@ class MarkdownParserTest < MiniTest::Test
   def test_test_it_can_convert_a_bigger_header
     header = '##### Header 5'
     parser = MarkdownParser.new(header)
-    converted_header = parser.convert_headers
+    converted_header = parser.convert_all
     assert_equal "<h5>Header 5</h5>", converted_header
   end
 
@@ -36,7 +36,7 @@ class MarkdownParserTest < MiniTest::Test
   def test_can_convert_strong
     str = '**strong**'
     parser = MarkdownParser.new(str)
-    strong = parser.convert_strong
+    strong = parser.convert_all
     assert_equal "<strong>strong</strong>", strong
   end
 
