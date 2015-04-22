@@ -1,3 +1,5 @@
+require_relative 'markdown_io'
+require_relative 'markdown_parser'
 
 class Chisel
   attr_reader :input_file, :output_file, :markdown
@@ -9,13 +11,13 @@ class Chisel
     @markdown = markdown
   end
 
-  def build_html
+  def chisel
 
     parser = MarkdownParser.new(markdown)
 
-    parser.convert_headers
+    parser.convert_all
 
-    '<h1>Input test file</h>'
+
   end
 end
 
@@ -25,10 +27,10 @@ if __FILE__ == $0
   markdown = MarkdownIO.read_markdown(ARGV[0])
 
   chisel = Chisel.new(ARGV[0], ARGV[1], markdown)
-
+  puts chisel.chisel
 
   # blah = ['testing', 'one', 'two']
-  # chisel_output_file = MarkdownIO.write_html(ARGV[1], blah)
+  #chisel_output_file = MarkdownIO.write_html(ARGV[1], markdown)
 end
 
 

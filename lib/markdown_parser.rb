@@ -14,20 +14,22 @@ class MarkdownParser
   end
 
   def convert_all
-    case markdown
 
-    when header_match_found?
-      convert_headers
-    when strong_match_found?
-      convert_strong
-    when emphasis_match_found?
-      convert_emphasis
-    when ampersand_match_found?
-      convert_ampersand
-    else
+    #case markdown
+
+    convert_headers if header_match_found?
+      #convert_headers
+    convert_strong if strong_match_found?
+
+    convert_emphasis if emphasis_match_found?
+
+    convert_ampersand if ampersand_match_found?
+
+
       #markdown
       generate_paragraphs
-    end
+
+    #puts markdown
   end
 
   def convert_headers
@@ -35,19 +37,20 @@ class MarkdownParser
     header_size = header[1].length
 
     header_tag = "<h#{header_size}>\\2</h#{header_size}>"
-    @markdown.gsub(/^(#+) *(.*)/, header_tag)
+    @markdown = markdown.gsub(/^(#+) *(.*)/, header_tag)
   end
 
   def convert_emphasis
-    markdown.gsub(/\*(.*)\*/, "<em>\\1</em>" )
+     @markdown = @markdown.gsub(/\*(.*)\*/, "<em>\\1</em>" )
+
   end
 
   def convert_strong
-    markdown.gsub(/\*\*(.*)\*\*/, "<strong>\\1</strong>" )
+    @markdown = markdown.gsub(/\*\*(.*)\*\*/, "<strong>\\1</strong>" )
   end
 
   def convert_ampersand
-    markdown.gsub('&', 'amp;')
+    @markdown = markdown.gsub('&', 'amp;')
   end
 
   def generate_paragraphs
@@ -60,21 +63,21 @@ class MarkdownParser
     end.join
   end
 
-  def generate_multi_line_paragraphs
-    get_multi_chunks.map.with_index do |chunk, index|
-      #binding.pry
-      if chunk.empty? && get_multi_chunks[index + 1].empty?
-
-        get_multi_chunks[index] = nil
-      elsif chunk.empty? && get_multi_chunks[index + 1].empty?
-        open_paragraph
-      elsif chunk.empty?
-        close_paragraph
-      else
-        multi_line(chunk)
-      end
-    end.compact!.join
-  end
+  # def generate_multi_line_paragraphs
+  #   get_multi_chunks.map.with_index do |chunk, index|
+  #     #binding.pry
+  #     if chunk.empty? && get_multi_chunks[index + 1].empty?
+  #
+  #       get_multi_chunks[index] = nil
+  #     elsif chunk.empty? && get_multi_chunks[index + 1].empty?
+  #       open_paragraph
+  #     elsif chunk.empty?
+  #       close_paragraph
+  #     else
+  #       multi_line(chunk)
+  #     end
+  #   end.compact!.join
+  # end
 
   def get_chunks
     markdown.split("\n\n").map do |chunk|
