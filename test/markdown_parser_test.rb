@@ -64,18 +64,17 @@ class MarkdownParserTest < MiniTest::Test
   def test_can_find_chunks
     chunks = "\nhello\n\nworld\n"
     parser = MarkdownParser.new(chunks)
-    paragraph = parser.generate_paragraphs
+    paragraph = parser.convert_all
 
     html = "<p>\n  hello\n</p>\n<p>\n  world\n</p>\n"
     assert_equal html , paragraph
   end
 
   def test_find_a_multi_line_paragraph
-    skip
     multi_chunks = "\n\nfirstline\nsecondline\nthirdline\n\nfirstline\nsecondline\nthirdline\n\n"
 
     multi_parser = MarkdownParser.new(multi_chunks)
-    multi_paragraph = multi_parser.generate_multi_line_paragraphs
+    multi_paragraph = multi_parser.convert_all
 
     html =
     %{
