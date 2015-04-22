@@ -15,21 +15,15 @@ class MarkdownParser
 
   def convert_all
 
-    #case markdown
 
     convert_headers if header_match_found?
-      #convert_headers
     convert_strong if strong_match_found?
-
     convert_emphasis if emphasis_match_found?
-
     convert_ampersand if ampersand_match_found?
 
 
-      #markdown
       generate_paragraphs
 
-    #puts markdown
   end
 
   def convert_headers
@@ -41,12 +35,11 @@ class MarkdownParser
   end
 
   def convert_emphasis
-     @markdown = @markdown.gsub(/\*(.*)\*/, "<em>\\1</em>" )
-
+     @markdown = @markdown.gsub(/\*(.*)\*/, "<em>\\1</em>")
   end
 
   def convert_strong
-    @markdown = markdown.gsub(/\*\*(.*)\*\*/, "<strong>\\1</strong>" )
+    @markdown = markdown.gsub(/\*\*(.*)\*\*/, "<strong>\\1</strong>")
   end
 
   def convert_ampersand
@@ -55,7 +48,7 @@ class MarkdownParser
 
   def generate_paragraphs
     get_chunks.map do |chunk|
-      if header?(chunk) # no paragraphs for headers
+      if header?(chunk)
         chunk
       else
         format_single_line_paragraph(chunk)
@@ -63,67 +56,20 @@ class MarkdownParser
     end.join
   end
 
-  # def generate_multi_line_paragraphs
-  #   get_multi_chunks.map.with_index do |chunk, index|
-  #     #binding.pry
-  #     if chunk.empty? && get_multi_chunks[index + 1].empty?
-  #
-  #       get_multi_chunks[index] = nil
-  #     elsif chunk.empty? && get_multi_chunks[index + 1].empty?
-  #       open_paragraph
-  #     elsif chunk.empty?
-  #       close_paragraph
-  #     else
-  #       multi_line(chunk)
-  #     end
-  #   end.compact!.join
-  # end
-
   def get_chunks
-    markdown.split("\n\n").map do |chunk|
-      chunk.gsub("\n", '')
-    end
+    markdown.split("\n\n")
   end
 
 
   private
 
-  def get_multi_chunks
-    @markdown.split("\n")
-  end
 
   def header?(chunk)
-    chunk[0] == '#'
-  end
-
-  def open_paragraph
-    %{<p>
-}
-  end
-
-  def close_paragraph
-    %{
-</p>}
-  end
-
-
-  def multi_line(chunk)
-    %{
-  #{chunk}</br>}
-  end
-
-  # def format_multiple_line_paragraph(chunk)
-  # end
-
-  def multiple_lines?(chunk)
-    chunk.include?("\n")
+    chunk[0..1] == "<h"
   end
 
   def format_single_line_paragraph(chunk)
-    %{<p>
-  #{chunk}
-</p>
-}
+    "\n<p>\n  #{chunk}</p>"
   end
 
   def header_match_found?

@@ -25,11 +25,11 @@ end
 
 if __FILE__ == $0
   markdown = MarkdownIO.read_markdown(ARGV[0])
-
+  puts; puts
   chisel = Chisel.new(ARGV[0], ARGV[1], markdown)
   puts chisel.chisel
 
-  # blah = ['testing', 'one', 'two']
+  puts; puts
   #chisel_output_file = MarkdownIO.write_html(ARGV[1], markdown)
 end
 
