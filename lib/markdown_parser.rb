@@ -19,9 +19,6 @@ class MarkdownParser
 
     convert_inline_link_with_title
     convert_inline_link_with_no_title
-
-
-
   end
 
   def convert_headers
@@ -30,31 +27,31 @@ class MarkdownParser
       header_size = header[1].length
 
       header_tag = "<h#{header_size}>\\2</h#{header_size}>"
-      @markdown = @markdown.gsub(/^(#+) *(.*)/, header_tag)
+      @markdown = markdown.gsub(/^(#+) *(.*)/, header_tag)
     end
    end
 
   def convert_emphasis
-     @markdown = @markdown.gsub!(/\*(.*)\*/, "<em>\\1</em>")
+     @markdown = markdown.gsub!(/\*(.*)\*/, "<em>\\1</em>")
   end
 
   def convert_strong
-    @markdown = @markdown.gsub(/\*\*(.*)\*\*/, "  <strong>\\1</strong>")
+    @markdown = markdown.gsub(/\*\*(.*)\*\*/, "  <strong>\\1</strong>")
   end
 
   def convert_ampersand
-    @markdown = @markdown.gsub('&', 'amp;')
+    @markdown = markdown.gsub('&', 'amp;')
   end
 
   def convert_inline_link_with_no_title
     if @markdown.match(/\[(.*)\]\((.*)[^"]\)/)
-      @markdown = @markdown.gsub(/\[(.*)\]\((.*)[^"]\)/, "<a href=\"\\2/\"\\3>\\1</a>")
+      @markdown = markdown.gsub(/\[(.*)\]\((.*)[^"]\)/, "<a href=\"\\2/\"\\3>\\1</a>")
     end
   end
 
   def convert_inline_link_with_title
     if @markdown.match(/\[(.*)\]\((.*) "(.*)"\)/)
-      @markdown = @markdown.gsub(/\[(.*)\]\((.*) "(.*)"\)/, "<a href=\"\\2\" title=\"\\3\">\\1</a>")
+      @markdown = markdown.gsub(/\[(.*)\]\((.*) "(.*)"\)/, "<a href=\"\\2\" title=\"\\3\">\\1</a>")
     end
   end
 
