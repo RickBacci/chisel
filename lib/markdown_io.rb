@@ -11,14 +11,20 @@ class MarkdownIO
       #binding.pry
       file.write(html)
     end
-    output_file_line_count = %x{sed -n '=' #{output_file} | wc -l}.to_i
-     input_file_line_count = %x{sed -n '=' #{input_file} | wc -l}.to_i
-    puts "Converted #{input_file} (#{input_file_line_count} lines) to #{output_file} (#{output_file_line_count} lines)"
+    puts return_result(input_file, output_file)
+  end
+
+  private
+
+  def self.return_result(input_file, output_file)
+    "Converted #{input_file} (#{count_lines(input_file)} lines)" <<
+      " to #{output_file} (#{count_lines(output_file)} lines)"
+  end
+
+  def self.count_lines(file)
+    %x{sed -n '=' #{file} | wc -l}.to_i
   end
 end
-
-
-
 
 # expected input line
 #$ ruby ./lib/chisel.rb my_input.markdown my_output.html
