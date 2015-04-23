@@ -16,7 +16,8 @@ class MarkdownIO
   private
 
   def self.return_result(input_file, output_file)
-    "Converted #{input_file} (#{count_lines(input_file)} lines)" <<
+
+    "\n\nConverted #{input_file} (#{count_lines(input_file)} lines)" <<
       " to #{output_file} (#{count_lines(output_file)} lines)"
   end
 

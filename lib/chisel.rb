@@ -21,7 +21,7 @@ end
 
 if __FILE__ == $0
   markdown = MarkdownIO.read_markdown(ARGV[0])
-  puts; puts
+
   chisel = Chisel.new(ARGV[0], ARGV[1], markdown)
   html = chisel.start_parser
 

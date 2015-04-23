@@ -15,8 +15,11 @@ class MarkdownParser
 
   def convert_all
     #@markdown = generate_paragraphs
-
+    generate_ordered_list
     generate_unordered_list
+    convert_inline_links
+
+
     convert_headers if header_match_found?
     convert_strong if strong_match_found?
     convert_emphasis if emphasis_match_found?
@@ -60,19 +63,26 @@ class MarkdownParser
   end
 
   def generate_unordered_list
-    if @markdown.match(/^\* (.*)/).nil?
-      @markdown
-    else
+    unless @markdown.match(/^\* (.*)/).nil?
       @markdown = "<ul>\n" + @markdown.gsub(/^\* (.*)/, "  <li>\\1</li>") + "\n</ul>"
     end
+    return @markdown
   end
 
   def generate_ordered_list
-    if @markdown.match(/^\d+\. (.*)/).nil?
-      @markdown
-    else
+    unless @markdown.match(/^\d+\. (.*)/).nil?
       @markdown = "<ol>\n" + @markdown.gsub(/^\d+\. (.*)/, "  <li>\\1</li>") + "\n</ol>"
     end
+    return @markdown
+  end
+
+  def convert_inline_links
+    if @markdown.match(/\[(.*)\]\((.*) "(.*)"\)$/)
+      @markdown = @markdown.gsub(/\[(.*)\]\((.*) "(.*)"\)$/, "<a href=\"\\2\" title=\"\\3\">\\1</a>")
+    elsif @markdown.match(/\[(.*)\]\((.*)[^"]\)$/)
+      @markdown = @markdown.gsub(/\[(.*)\]\((.*)[^"]\)$/, "<a href=\"\\2/\"\\3>\\1</a>")
+    end
+    return @markdown
   end
 
   private
