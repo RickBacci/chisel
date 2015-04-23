@@ -11,12 +11,11 @@ class Chisel
     @markdown = markdown
   end
 
-  def chisel
-
+  def start_parser
     parser = MarkdownParser.new(markdown)
-
-    parser.convert_all
-
+    @markdown = parser.convert_all
+    #puts @markdown
+    #MarkdownIO.write_html(ARGV[1], @markdown)
 
   end
 end
@@ -27,10 +26,9 @@ if __FILE__ == $0
   markdown = MarkdownIO.read_markdown(ARGV[0])
   puts; puts
   chisel = Chisel.new(ARGV[0], ARGV[1], markdown)
-  puts chisel.chisel
+  html = chisel.start_parser
 
-  puts; puts
-  #chisel_output_file = MarkdownIO.write_html(ARGV[1], markdown)
+  MarkdownIO.write_html(ARGV[0], ARGV[1], html)
 end
 
 
