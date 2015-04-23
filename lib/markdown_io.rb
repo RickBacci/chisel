@@ -8,7 +8,6 @@ class MarkdownIO
   def self.write_html(input_file, output_file, html)
 
     File.open(output_file, "w") do |file|
-      #binding.pry
       file.write(html)
     end
     puts return_result(input_file, output_file)
@@ -25,9 +24,3 @@ class MarkdownIO
     %x{sed -n '=' #{file} | wc -l}.to_i
   end
 end
-
-# expected input line
-#$ ruby ./lib/chisel.rb my_input.markdown my_output.html
-
-# expected output line
-# Converted my_input.markdown (6 lines) to my_output.html (8 lines)

@@ -16,10 +16,10 @@ class MarkdownParser
   def convert_all
     @markdown = generate_paragraphs
 
-    @markdown = convert_headers if header_match_found?
-    @markdown = convert_strong if strong_match_found?
-    @markdown = convert_emphasis if emphasis_match_found?
-    @markdown = convert_ampersand if ampersand_match_found?
+    convert_headers if header_match_found?
+    convert_strong if strong_match_found?
+    convert_emphasis if emphasis_match_found?
+    convert_ampersand if ampersand_match_found?
 
   end
 
@@ -52,10 +52,23 @@ class MarkdownParser
          chunk
        else
          get_chunks[index] = format_single_line_paragraph(chunk)
+
        end
      end
 
      @markdown = text.join("\n\n")
+  end
+
+  def generate_unordered_list
+    "<p>
+  My favorite cuisines are:
+</p>
+
+<ul>
+  <li>Sushi</li>
+  <li>Barbeque</li>
+  <li>Mexican</li>
+</ul>"
   end
 
   private

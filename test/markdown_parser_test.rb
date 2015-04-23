@@ -48,4 +48,21 @@ class MarkdownParserTest < MiniTest::Test
     assert_equal "amp;", ampersand
   end
 
+  def test_can_generate_unordered_list
+    uo_list = "My favorite cuisines are:\n\n* Sushi\n* Barbeque\n* Mexican"
+    parser = MarkdownParser.new(uo_list)
+    unordered = parser.generate_unordered_list
+
+    uo_html = "<p>
+  My favorite cuisines are:
+</p>
+
+<ul>
+  <li>Sushi</li>
+  <li>Barbeque</li>
+  <li>Mexican</li>
+</ul>"
+    assert_equal uo_html , unordered
+
+  end
 end

@@ -14,9 +14,6 @@ class Chisel
   def start_parser
     parser = MarkdownParser.new(markdown)
     @markdown = parser.convert_all
-    #puts @markdown
-    #MarkdownIO.write_html(ARGV[1], @markdown)
-
   end
 end
 

@@ -25,11 +25,13 @@ class MarkdownIoTest < MiniTest::Test
 
 
   def test_markdown_io_can_write_a_file
+    input_file = './test/test_io_files/test_input_file.markdown'
     output_file = './test/test_io_files/test_output_file.html'
+
     blah = '<h1>Hello World</h1>'
 
-    write_test = MarkdownIO.write_html(output_file, blah)
-    assert write_test
+    write_test = MarkdownIO.write_html(input_file, output_file, blah)
+    assert '<h1>Hello World</h1>', MarkdownIO.read_markdown(output_file)
   end
 end
 
