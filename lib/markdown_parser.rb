@@ -14,16 +14,17 @@ class MarkdownParser
   end
 
   def convert_all
-    #@markdown = generate_paragraphs
-    generate_ordered_list
-    generate_unordered_list
-    convert_inline_links
-
+    #generate_paragraphs
 
     convert_headers if header_match_found?
     convert_strong if strong_match_found?
     convert_emphasis if emphasis_match_found?
     convert_ampersand if ampersand_match_found?
+
+
+    generate_ordered_list
+    generate_unordered_list
+    convert_inline_links
   end
 
   def convert_headers
@@ -37,7 +38,7 @@ class MarkdownParser
    end
 
   def convert_emphasis
-     @markdown.gsub!(/\*(.*)\*/, "<em>\\1</em>")
+     @markdown = @markdown.gsub!(/\*(.*)\*/, "<em>\\1</em>")
   end
 
   def convert_strong
@@ -55,23 +56,25 @@ class MarkdownParser
          chunk
        else
          get_chunks[index] = format_single_line_paragraph(chunk)
-
        end
      end
-
      @markdown = text.join("\n\n")
   end
 
   def generate_unordered_list
-    unless @markdown.match(/^\* (.*)/).nil?
-      @markdown = "<ul>\n" + @markdown.gsub(/^\* (.*)/, "  <li>\\1</li>") + "\n</ul>"
+    if @markdown.match(/^\* (.*)/).nil?
+      @markdown
+    else
+      @markdown = @markdown.gsub(/^\* (.*)/, "  <li>\\1</li>")
     end
     return @markdown
   end
 
   def generate_ordered_list
-    unless @markdown.match(/^\d+\. (.*)/).nil?
-      @markdown = "<ol>\n" + @markdown.gsub(/^\d+\. (.*)/, "  <li>\\1</li>") + "\n</ol>"
+    if @markdown.match(/^\d+\. (.*)/).nil?
+      @markdown
+    else
+      @markdown = @markdown.gsub(/^\d+\. (.*)/, "  <li>\\1</li>")
     end
     return @markdown
   end

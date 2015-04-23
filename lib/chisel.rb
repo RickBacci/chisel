@@ -27,7 +27,3 @@ if __FILE__ == $0
 
   MarkdownIO.write_html(ARGV[0], ARGV[1], html)
 end
-
-
-
-

@@ -2,6 +2,10 @@ require './test/test_helper'
 
 class MarkdownParserTest < MiniTest::Test
 
+  def setup
+    @test_markdown = 'testing asdf'
+  end
+
   def test_parser_exists
     data = 'test'
     parser = MarkdownParser.new(data)
@@ -131,7 +135,6 @@ class MarkdownParserTest < MiniTest::Test
     assert_equal link_html, inline_link
   end
 
-
   def test_converting_an_inline_link_by_itself
     link = "[an example](http://example.com/ \"Title\")"
 
@@ -153,4 +156,10 @@ class MarkdownParserTest < MiniTest::Test
   end
 
 
+
+
 end
+
+# ![Alt text](/path/to/img.jpg)
+#
+# ![Alt text](/path/to/img.jpg "Optional title")

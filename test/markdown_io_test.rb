@@ -12,14 +12,9 @@ class MarkdownIoTest < MiniTest::Test
   def test_markdown_io_can_read_required_file
     input_file = 'my_input.markdown'
     markdown = MarkdownIO.read_markdown(input_file)
-    output =
-      '# My Life in Desserts
 
-## Chapter 1: The Beginning
+    output = "# My Life in Desserts\n\n## Chapter 1: The Beginning\n\n\"You just *have* to try the cheesecake,\" he said. \"Ever since it appeared in\n**Food & Wine** this place has been packed every night.\"\n\n\n* whatever\n* i'm tired.\n* deal with it.\n\n1. yeah\n2. i'm slow\n3. pizza\n\n\n\nThis is [an example](http://example.com/ \"Title\") inline link.\n\n[This link](http://example.net/) has no title attribute.\n"
 
-"You just *have* to try the cheesecake," he said. "Ever since it appeared in
-**Food & Wine** this place has been packed every night."
-'
     assert_equal output, markdown
   end
 
@@ -34,20 +29,3 @@ class MarkdownIoTest < MiniTest::Test
     assert '<h1>Hello World</h1>', MarkdownIO.read_markdown(output_file)
   end
 end
-
-
-
-
-#
-#
-# html =
-#   %{
-# <h1>My Life in Desserts</h1>
-#
-# <h2>Chapter 1: The Beginning</h2>
-#
-# <p>
-#   "You just <em>have</em> to try the cheesecake," he said. "Ever since it appeared in
-#   <strong>Food &amp; Wine</strong> this place has been packed every night."
-# </p>
-# }
