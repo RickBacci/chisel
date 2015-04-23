@@ -54,8 +54,7 @@ class MarkdownParserTest < MiniTest::Test
 
     html_blocks = HtmlBlockItems.new(uo_list)
     unordered = html_blocks.process_block_items
-    #binding.pry
-    uo_html = "  <ul>\n  <li>Sushi</li>\n</ul>"
+    uo_html = "<p>\n  <ul>    <li>Sushi</li>\n  </ul>\n</p>\n"
     assert_equal uo_html , unordered
   end
 
@@ -65,7 +64,8 @@ class MarkdownParserTest < MiniTest::Test
     html_blocks = HtmlBlockItems.new(uo_list)
     unordered = html_blocks.process_block_items
 
-    uo_html = "<p>\n  <ul>    <li>Sushi</li>\n  </ul>\n</p>\n"
+    uo_html = "<p>\n  <ul>    <li>Sushi</li>\n    <li>Barbeque</li>\n  </ul>\n</p>\n"
+
     assert_equal uo_html , unordered
   end
 
@@ -104,7 +104,6 @@ class MarkdownParserTest < MiniTest::Test
     html_blocks = HtmlBlockItems.new(o_list)
     ordered = html_blocks.process_block_items
     o_html = "<p>\n  <ol>\n    <li>Sushi</li>\n    <li>Barbeque</li>\n  </ol>\n</p>\n"
-
     assert_equal o_html , ordered
   end
 
