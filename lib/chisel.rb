@@ -24,5 +24,5 @@ if __FILE__ == $0
   chisel = Chisel.new(ARGV[0], ARGV[1], markdown_file)
   html   = chisel.start_parser
 
-  MarkdownIO.write_html(ARGV[0], ARGV[1], html)
+  puts MarkdownIO.write_html(ARGV[0], ARGV[1], html)
 end
