@@ -9,14 +9,15 @@ class HtmlBlockItems
   def process_block_items
     generate_unordered_list
     generate_ordered_list
+    generate_paragraphs
   end
 
   def generate_unordered_list
     @markdown = get_chunks.map do |chunk|
-      if chunk.match(/^\* (.*)/).nil?
+      if chunk.match(/^\* (.*)/).nil? || chunk.empty?
         chunk
       else
-        chunk = "<ul>" + chunk.gsub(/^\* (.*)/, "  <li>\\1</li>") + "\n</ul>"
+        chunk = "<ul>" + chunk.gsub(/^\* (.*)/, "    <li>\\1</li>") + "\n  </ul>"
       end
       chunk
     end.join("\n\n")
@@ -24,10 +25,20 @@ class HtmlBlockItems
 
   def generate_ordered_list
     @markdown = get_chunks.map do |chunk|
-      if chunk.match(/^\d+\. (.*)/).nil?
+      if chunk.match(/^\d+\. (.*)/).nil? || chunk.empty?
         chunk
       else
-        chunk = "<ol>\n" + chunk.gsub(/^\d+\. (.*)/, "  <li>\\1</li>") + "\n</ol>"
+        chunk = "<ol>\n" + chunk.gsub(/^\d+\. (.*)/, "    <li>\\1</li>") + "\n  </ol>"
+      end
+    end.join("\n\n")
+  end
+
+  def generate_paragraphs
+    @markdown = get_chunks.map do |chunk|
+      if header?(chunk) || chunk.empty?
+        chunk
+      else
+        "<p>\n  #{chunk}\n</p>\n"
       end
     end.join("\n\n")
   end
@@ -38,18 +49,8 @@ class HtmlBlockItems
     markdown.split("\n\n")
   end
 
+  def header?(chunk)
+    chunk[0] == "#"
+  end
+
 end
-
-
-
-
-
-
-  # def generate_ordered_list
-  #   if @markdown.match(/^\d+\. (.*)/).nil?
-  #     @markdown
-  #   else
-  #     @markdown = @markdown.gsub(/^\d+\. (.*)/, "  <li>\\1</li>")
-  #   end
-  #   return @markdown
-  # end
