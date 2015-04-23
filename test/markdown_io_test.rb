@@ -23,9 +23,24 @@ class MarkdownIoTest < MiniTest::Test
     input_file = './test/test_io_files/test_input_file.markdown'
     output_file = './test/test_io_files/test_output_file.html'
 
-    blah = '<h1>Hello World</h1>'
+    hello = '<h1>Hello World</h1>'
 
-    write_test = MarkdownIO.write_html(input_file, output_file, blah)
+    write_test = MarkdownIO.write_html(input_file, output_file, hello)
     assert '<h1>Hello World</h1>', MarkdownIO.read_markdown(output_file)
+  end
+
+  def test_write_html_returns_proper_response
+
+    input_file = './test/test_io_files/test_input_file.markdown'
+    output_file = './test/test_io_files/test_output_file.html'
+    markdown_file = "# Input test file"
+
+
+    result_of_write = "\n\nConverted ./test/test_io_files/test_input_file.markdown (1 lines) to ./test/test_io_files/test_output_file.html (1 lines)"
+    html = "<h1>Hello World</h1>"
+
+    result = MarkdownIO.write_html(input_file, output_file, html)
+
+    assert_equal result_of_write, result
   end
 end

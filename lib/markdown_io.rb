@@ -10,7 +10,7 @@ class MarkdownIO
     File.open(output_file, "w") do |file|
       file.write(html)
     end
-    puts return_result(input_file, output_file)
+    return return_result(input_file, output_file)
   end
 
   private
