@@ -2,11 +2,6 @@ require './test/test_helper'
 
 class MarkdownParserTest < MiniTest::Test
 
-  # def setup
-  #   markdown_file = MarkdownIO.read_markdown('./my_input.markdown')
-  #   @parser = MarkdownParser.new(markdown_file)
-  # end
-
   def test_parser_exists
     data = 'test'
     parser = MarkdownParser.new(data)
@@ -48,93 +43,11 @@ class MarkdownParserTest < MiniTest::Test
     assert_equal "amp;", ampersand
   end
 
-  def test_can_generate_unordered_list
-    uo_list = "* Sushi"
-    #parser = MarkdownParser.new(uo_list)
-
-    html_blocks = HtmlBlockItems.new(uo_list)
-    unordered = html_blocks.process_block_items
-    uo_html = "<p>\n  <ul>    <li>Sushi</li>\n  </ul>\n</p>\n"
-    assert_equal uo_html , unordered
-  end
-
-  def test_can_generate_another_unordered_list
-    uo_list = "* Sushi\n* Barbeque"
-
-    html_blocks = HtmlBlockItems.new(uo_list)
-    unordered = html_blocks.process_block_items
-
-    uo_html = "<p>\n  <ul>    <li>Sushi</li>\n    <li>Barbeque</li>\n  </ul>\n</p>\n"
-
-    assert_equal uo_html , unordered
-  end
-
-  def test_does_not_generate_unordered_list_on_empty_string
-    uo_list = ""
-
-    html_blocks = HtmlBlockItems.new(uo_list)
-    unordered = html_blocks.process_block_items
-
-    uo_html = ""
-    assert_equal uo_html , unordered
-  end
-
-  def test_can_generate_unordered_list_with_process_block_items
-    uo_list = "* Sushi\n* Barbeque"
-
-    html_blocks = HtmlBlockItems.new(uo_list)
-    unordered = html_blocks.process_block_items
-    uo_html = "<p>\n  <ul>    <li>Sushi</li>\n    <li>Barbeque</li>\n  </ul>\n</p>\n"
-
-    assert_equal uo_html , unordered
-  end
-
-  def test_can_generate_ordered_list
-    o_list = "1. Sushi"
-
-    html_blocks = HtmlBlockItems.new(o_list)
-    ordered = html_blocks.process_block_items
-    o_html = "<p>\n  <ol>\n    <li>Sushi</li>\n  </ol>\n</p>\n"
-    assert_equal o_html , ordered
-  end
-
-  def test_can_generate_another_ordered_list
-    o_list = "1. Sushi\n2. Barbeque"
-
-    html_blocks = HtmlBlockItems.new(o_list)
-    ordered = html_blocks.process_block_items
-    o_html = "<p>\n  <ol>\n    <li>Sushi</li>\n    <li>Barbeque</li>\n  </ol>\n</p>\n"
-    assert_equal o_html , ordered
-  end
-
-  def test_does_not_generate_ordered_list_on_empty_string
-    o_list = ""
-
-    html_blocks = HtmlBlockItems.new(o_list)
-    ordered = html_blocks.process_block_items
-
-    o_html = ""
-
-    assert_equal o_html , ordered
-  end
-
-  def test_can_generate_ordered_list_with_html_blocks
-    o_list = "1. Sushi\n2. Barbeque"
-
-    html_blocks = HtmlBlockItems.new(o_list)
-    ordered = html_blocks.process_block_items
-    o_html = "<p>\n  <ol>\n    <li>Sushi</li>\n    <li>Barbeque</li>\n  </ol>\n</p>\n"
-
-    assert_equal o_html , ordered
-  end
-
   def test_converting_an_inline_link_with_no_title_by_itself
     link = "[This link](http://example.net/)"
 
     parser = MarkdownParser.new(link)
     inline_link = parser.convert_inline_link_with_no_title
-
-
 
     link_html = "<a href=\"http://example.net/\">This link</a>"
     assert_equal link_html, inline_link
@@ -150,7 +63,7 @@ class MarkdownParserTest < MiniTest::Test
     assert_equal link_html, inline_link
   end
 
-  def test_converting_an_inline_link_with_convert_all
+  def test_converting_an_inline_link_with_title
     link = "[an example](http://example.com/ \"Title\")"
 
     parser = MarkdownParser.new(link)

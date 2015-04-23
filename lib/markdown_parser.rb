@@ -12,13 +12,14 @@ class MarkdownParser
     html_blocks = HtmlBlockItems.new(markdown)
     @markdown = html_blocks.process_block_items
 
+
     convert_headers if header_match_found?
     convert_strong if strong_match_found?
     convert_emphasis if emphasis_match_found?
     convert_ampersand if ampersand_match_found?
+    convert_inline_link_with_title if inline_link_with_title_found?
+    convert_inline_link_with_no_title if inline_link_with_no_title_found?
 
-    convert_inline_link_with_title
-    convert_inline_link_with_no_title
   end
 
   def convert_headers
@@ -27,31 +28,31 @@ class MarkdownParser
       header_size = header[1].length
 
       header_tag = "<h#{header_size}>\\2</h#{header_size}>"
-      @markdown = markdown.gsub(/^(#+) *(.*)/, header_tag)
+      @markdown.gsub!(/^(#+) *(.*)/, header_tag)
     end
    end
 
   def convert_emphasis
-     @markdown = markdown.gsub!(/\*(.*)\*/, "<em>\\1</em>")
+     @markdown.gsub!(/\*(.*)\*/, "<em>\\1</em>")
   end
 
   def convert_strong
-    @markdown = markdown.gsub(/\*\*(.*)\*\*/, "  <strong>\\1</strong>")
+    @markdown.gsub!(/\*\*(.*)\*\*/, "  <strong>\\1</strong>")
   end
 
   def convert_ampersand
-    @markdown = markdown.gsub('&', 'amp;')
+    @markdown.gsub!('&', 'amp;')
   end
 
   def convert_inline_link_with_no_title
     if @markdown.match(/\[(.*)\]\((.*)[^"]\)/)
-      @markdown = markdown.gsub(/\[(.*)\]\((.*)[^"]\)/, "<a href=\"\\2/\"\\3>\\1</a>")
+      @markdown.gsub!(/\[(.*)\]\((.*)[^"]\)/, "<a href=\"\\2/\"\\3>\\1</a>")
     end
   end
 
   def convert_inline_link_with_title
     if @markdown.match(/\[(.*)\]\((.*) "(.*)"\)/)
-      @markdown = markdown.gsub(/\[(.*)\]\((.*) "(.*)"\)/, "<a href=\"\\2\" title=\"\\3\">\\1</a>")
+      @markdown = @markdown.gsub!(/\[(.*)\]\((.*) "(.*)"\)/, "<a href=\"\\2\" title=\"\\3\">\\1</a>")
     end
   end
 
