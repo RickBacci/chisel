@@ -12,22 +12,26 @@ class MarkdownParser
     html_blocks = HtmlBlockItems.new(markdown)
     @markdown = html_blocks.process_block_items
 
-
-    convert_headers #if header_match_found?
-    convert_strong #if strong_match_found?
-    convert_emphasis #if emphasis_match_found?
-    convert_ampersand #if ampersand_match_found?
+    convert_headers if header_match_found?
+    convert_strong if strong_match_found?
+    convert_emphasis if emphasis_match_found?
+    convert_ampersand if ampersand_match_found?
 
     convert_inline_link_with_title
     convert_inline_link_with_no_title
+
+
+
   end
 
   def convert_headers
+    unless /^(#+) *(.*)/.match(markdown).nil?
       header = /^(#+) *(.*)/.match(markdown)
       header_size = header[1].length
 
       header_tag = "<h#{header_size}>\\2</h#{header_size}>"
       @markdown = @markdown.gsub(/^(#+) *(.*)/, header_tag)
+    end
    end
 
   def convert_emphasis

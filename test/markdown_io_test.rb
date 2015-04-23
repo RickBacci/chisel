@@ -13,7 +13,7 @@ class MarkdownIoTest < MiniTest::Test
     input_file = 'my_input.markdown'
     markdown = MarkdownIO.read_markdown(input_file)
 
-    output = "# My Life in Desserts\n\n## Chapter 1: The Beginning\n\n\"You just *have* to try the cheesecake,\" he said. \"Ever since it appeared in\n**Food & Wine** this place has been packed every night.\"\n\n\n* whatever\n* i'm tired.\n* deal with it.\n\n1. yeah\n2. i'm slow\n3. pizza\n\n\n\nThis is [an example](http://example.com/ \"Title\") inline link.\n\n[This link](http://example.net/) has no title attribute.\n"
+    output = "# My Life in Desserts\n\n## Chapter 1: The Beginning\n\n\"You just *have* to try the cheesecake,\" he said. \"Ever since it appeared in\n**Food & Wine** this place has been packed every night.\"\n\n\n* whatever\n* i'm tired.\n* deal with it.\n\n1. yeah\n2. i'm slow\n3. pizza\n\n\n\nThis is [an example](http://example.com/ \"Title\") inline link.\n\n[This link](http://example.net/) has no title attribute.\n\n"
 
     assert_equal output, markdown
   end
