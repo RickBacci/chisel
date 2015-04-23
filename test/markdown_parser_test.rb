@@ -55,7 +55,7 @@ class MarkdownParserTest < MiniTest::Test
     html_blocks = HtmlBlockItems.new(uo_list)
     unordered = html_blocks.process_block_items
     #binding.pry
-    uo_html = "    <ul>\n    <li>Sushi</li>\n    </ul>"
+    uo_html = "  <ul>\n  <li>Sushi</li>\n</ul>"
     assert_equal uo_html , unordered
   end
 
@@ -84,8 +84,7 @@ class MarkdownParserTest < MiniTest::Test
 
     html_blocks = HtmlBlockItems.new(uo_list)
     unordered = html_blocks.process_block_items
-
-    uo_html = "<ul>\n  <li>Sushi</li>\n  <li>Barbeque</li>\n</ul>"
+    uo_html = "<p>\n  <ul>    <li>Sushi</li>\n    <li>Barbeque</li>\n  </ul>\n</p>\n"
 
     assert_equal uo_html , unordered
   end
@@ -95,8 +94,7 @@ class MarkdownParserTest < MiniTest::Test
 
     html_blocks = HtmlBlockItems.new(o_list)
     ordered = html_blocks.process_block_items
-
-    o_html = "<ol>\n  <li>Sushi</li>\n</ol>"
+    o_html = "<p>\n  <ol>\n    <li>Sushi</li>\n  </ol>\n</p>\n"
     assert_equal o_html , ordered
   end
 
@@ -105,10 +103,7 @@ class MarkdownParserTest < MiniTest::Test
 
     html_blocks = HtmlBlockItems.new(o_list)
     ordered = html_blocks.process_block_items
-    #parser = MarkdownParser.new(o_list)
-    #ordered = parser.generate_ordered_list
-
-    o_html = "<ol>\n  <li>Sushi</li>\n  <li>Barbeque</li>\n</ol>"
+    o_html = "<p>\n  <ol>\n    <li>Sushi</li>\n    <li>Barbeque</li>\n  </ol>\n</p>\n"
 
     assert_equal o_html , ordered
   end
@@ -124,13 +119,12 @@ class MarkdownParserTest < MiniTest::Test
     assert_equal o_html , ordered
   end
 
-  def test_can_generate_ordered_list_with_convert_all
+  def test_can_generate_ordered_list_with_html_blocks
     o_list = "1. Sushi\n2. Barbeque"
 
     html_blocks = HtmlBlockItems.new(o_list)
     ordered = html_blocks.process_block_items
-
-    o_html = "  <ol>\n    <li>Sushi</li>\n    <li>Barbeque</li>\n  </ol>"
+    o_html = "<p>\n  <ol>\n    <li>Sushi</li>\n    <li>Barbeque</li>\n  </ol>\n</p>\n"
 
     assert_equal o_html , ordered
   end
