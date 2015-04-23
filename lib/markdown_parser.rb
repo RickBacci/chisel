@@ -14,42 +14,44 @@ class MarkdownParser
   end
 
   def convert_all
-    generate_paragraphs
+    @markdown = generate_paragraphs
 
-    convert_headers if header_match_found?
-    convert_strong if strong_match_found?
-    convert_emphasis if emphasis_match_found?
-    convert_ampersand if ampersand_match_found?
+    @markdown = convert_headers if header_match_found?
+    @markdown = convert_strong if strong_match_found?
+    @markdown = convert_emphasis if emphasis_match_found?
+    @markdown = convert_ampersand if ampersand_match_found?
+
   end
 
   def convert_headers
-    header = /^(#+) *(.*)/.match(markdown)
-    header_size = header[1].length
+    if header?(markdown)
+      header = /^(#+) *(.*)/.match(markdown)
+      header_size = header[1].length
 
-    header_tag = "<h#{header_size}>\\2</h#{header_size}>"
-    @markdown = markdown.gsub(/^(#+) *(.*)/, header_tag)
-  end
+      header_tag = "<h#{header_size}>\\2</h#{header_size}>"
+      @markdown = @markdown.gsub(/^(#+) *(.*)/, header_tag)
+    end
+   end
 
   def convert_emphasis
      @markdown = @markdown.gsub(/\*(.*)\*/, "<em>\\1</em>")
   end
 
   def convert_strong
-    @markdown = markdown.gsub(/\*\*(.*)\*\*/, "<strong>\\1</strong>")
+    @markdown = @markdown.gsub(/\*\*(.*)\*\*/, "<strong>\\1</strong>")
   end
 
   def convert_ampersand
-    @markdown = markdown.gsub('&', 'amp;')
+    @markdown = @markdown.gsub('&', 'amp;')
   end
 
   def generate_paragraphs
-     chunks = get_chunks
 
-     text = chunks.map.with_index do |chunk, index|
+     text = get_chunks.map.with_index do |chunk, index|
        if header?(chunk)
          chunk
        else
-         chunks[index] = format_single_line_paragraph(chunk)
+         get_chunks[index] = format_single_line_paragraph(chunk)
        end
      end
 
