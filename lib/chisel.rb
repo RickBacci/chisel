@@ -2,7 +2,8 @@ require_relative 'markdown_io'
 require_relative 'markdown_parser'
 
 class Chisel
-  attr_reader :input_file, :output_file, :markdown
+  attr_reader :input_file, :output_file
+  attr_accessor :markdown
 
   def initialize(input_file, output_file, markdown)
 
@@ -13,7 +14,9 @@ class Chisel
 
   def start_parser
     parser = MarkdownParser.new(markdown)
-    @markdown = parser.convert_all
+    parser.convert_all
+
+   # @markdown = parser.convert_all
   end
 end
 

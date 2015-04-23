@@ -2,9 +2,6 @@ require './test/test_helper'
 
 class MarkdownParserTest < MiniTest::Test
 
-  def setup
-    @test_markdown = 'testing asdf'
-  end
 
   def test_parser_exists
     data = 'test'
@@ -15,7 +12,7 @@ class MarkdownParserTest < MiniTest::Test
   def test_parser_can_convert_a_header
     header = '# Header'
     parser = MarkdownParser.new(header)
-    converted_header = parser.convert_all
+    converted_header = parser.convert_headers
     assert_equal "<h1>Header</h1>", converted_header
   end
 
@@ -128,7 +125,8 @@ class MarkdownParserTest < MiniTest::Test
     link = "[This link](http://example.net/)"
 
     parser = MarkdownParser.new(link)
-    inline_link = parser.convert_inline_links
+    inline_link = parser.convert_inline_link_with_no_title
+
 
 
     link_html = "<a href=\"http://example.net/\">This link</a>"
@@ -139,7 +137,7 @@ class MarkdownParserTest < MiniTest::Test
     link = "[an example](http://example.com/ \"Title\")"
 
     parser = MarkdownParser.new(link)
-    inline_link = parser.convert_inline_links
+    inline_link = parser.convert_inline_link_with_title
 
     link_html = "<a href=\"http://example.com/\" title=\"Title\">an example</a>"
     assert_equal link_html, inline_link

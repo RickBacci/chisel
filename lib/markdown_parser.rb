@@ -1,30 +1,29 @@
-
-# * With the `["", "...", "..."]`, where the empty string was messing up
-#   the paragraphs, we can first remove it and then map it:
-#   [18] pry(main)> [1,2,3,4,5].reject { |n| n == 3 }.map { |n| n.even? }
-#   => [false, true, true, false]
-
+require_relative 'html_block_items'
 require 'pry'
 
 class MarkdownParser
-  attr_reader :markdown
+  attr_accessor :markdown
 
   def initialize(markdown)
     @markdown = markdown
   end
 
   def convert_all
+    html_blocks = HtmlBlockItems.new(markdown)
+    @markdown = html_blocks.process_block_items
+
     #generate_paragraphs
+    #generate_ordered_list if ordered_list_found?
+    ##generate_unordered_list if unordered_list_found?
+
 
     convert_headers if header_match_found?
     convert_strong if strong_match_found?
     convert_emphasis if emphasis_match_found?
     convert_ampersand if ampersand_match_found?
 
-
-    generate_ordered_list
-    generate_unordered_list
-    convert_inline_links
+    convert_inline_link_with_title
+    convert_inline_link_with_no_title
   end
 
   def convert_headers
@@ -61,31 +60,43 @@ class MarkdownParser
      @markdown = text.join("\n\n")
   end
 
-  def generate_unordered_list
-    if @markdown.match(/^\* (.*)/).nil?
-      @markdown
-    else
-      @markdown = @markdown.gsub(/^\* (.*)/, "  <li>\\1</li>")
+  # def generate_unordered_list
+  #   if @markdown.match(/^\* (.*)/).nil?
+  #     @markdown
+  #   else
+  #     @markdown = @markdown.gsub(/^\* (.*)/, "  <li>\\1</li>")
+  #   end
+  #   return @markdown
+  # end
+
+  # def generate_ordered_list
+  #   if @markdown.match(/^\d+\. (.*)/).nil?
+  #     @markdown
+  #   else
+  #     @markdown = @markdown.gsub(/^\d+\. (.*)/, "  <li>\\1</li>")
+  #   end
+  #   return @markdown
+  # end
+
+  # def convert_inline_links
+  #   if @markdown.match(/\[(.*)\]\((.*)[^"]\)/)
+  #     @markdown = @markdown.gsub(/\[(.*)\]\((.*)[^"]\)/, "<a href=\"\\2/\"\\3>\\1</a>")
+  #   elsif @markdown.match(/\[(.*)\]\((.*) "(.*)"\)/)
+  #     @markdown = @markdown.gsub(/\[(.*)\]\((.*) "(.*)"\)/, "<a href=\"\\2\" title=\"\\3\">\\1</a>")
+  #   end
+  #   return @markdown
+  # end
+
+  def convert_inline_link_with_no_title
+    if @markdown.match(/\[(.*)\]\((.*)[^"]\)/)
+      @markdown = @markdown.gsub(/\[(.*)\]\((.*)[^"]\)/, "<a href=\"\\2/\"\\3>\\1</a>")
     end
-    return @markdown
   end
 
-  def generate_ordered_list
-    if @markdown.match(/^\d+\. (.*)/).nil?
-      @markdown
-    else
-      @markdown = @markdown.gsub(/^\d+\. (.*)/, "  <li>\\1</li>")
+  def convert_inline_link_with_title
+    if @markdown.match(/\[(.*)\]\((.*) "(.*)"\)/)
+      @markdown = @markdown.gsub(/\[(.*)\]\((.*) "(.*)"\)/, "<a href=\"\\2\" title=\"\\3\">\\1</a>")
     end
-    return @markdown
-  end
-
-  def convert_inline_links
-    if @markdown.match(/\[(.*)\]\((.*) "(.*)"\)$/)
-      @markdown = @markdown.gsub(/\[(.*)\]\((.*) "(.*)"\)$/, "<a href=\"\\2\" title=\"\\3\">\\1</a>")
-    elsif @markdown.match(/\[(.*)\]\((.*)[^"]\)$/)
-      @markdown = @markdown.gsub(/\[(.*)\]\((.*)[^"]\)$/, "<a href=\"\\2/\"\\3>\\1</a>")
-    end
-    return @markdown
   end
 
   private
@@ -117,5 +128,30 @@ class MarkdownParser
   def ampersand_match_found?
     /&/
   end
+
+  def unordered_list_found?
+    /^\* (.*)/
+  end
+
+  def ordered_list_found?
+    /^\d+\. (.*)/
+  end
+
+  def inline_link_with_title_found?
+    /\[(.*)\]\((.*) "(.*)"\)/
+  end
+
+  def inline_link_with_no_title_found?
+    /\[(.*)\]\((.*)[^"]\)/
+  end
+
 end
 
+
+
+
+
+# * With the `["", "...", "..."]`, where the empty string was messing up
+#   the paragraphs, we can first remove it and then map it:
+#   [18] pry(main)> [1,2,3,4,5].reject { |n| n == 3 }.map { |n| n.even? }
+#   => [false, true, true, false]
