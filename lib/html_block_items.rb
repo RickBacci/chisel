@@ -1,21 +1,18 @@
 
-
-
 class HtmlBlockItems
   attr_accessor :markdown
 
   def initialize(markdown)
-    @markdown = markdown.split("\n\n")
-    @chunks = markdown.split("\n\n")
+    @markdown = markdown
   end
 
   def process_block_items
     generate_unordered_list
+    generate_ordered_list
   end
 
   def generate_unordered_list
-   #binding.pry
-    @markdown = @chunks.map do |chunk|
+    @markdown = get_chunks.map do |chunk|
       if chunk.match(/^\* (.*)/).nil?
         chunk
       else
@@ -24,6 +21,23 @@ class HtmlBlockItems
       chunk
     end.join("\n\n")
   end
+
+  def generate_ordered_list
+    @markdown = get_chunks.map do |chunk|
+      if chunk.match(/^\d+\. (.*)/).nil?
+        chunk
+      else
+        chunk = "<ol>\n" + chunk.gsub(/^\d+\. (.*)/, "  <li>\\1</li>") + "\n</ol>"
+      end
+    end.join("\n\n")
+  end
+
+  private
+
+  def get_chunks
+    markdown.split("\n\n")
+  end
+
 end
 
 
