@@ -2,16 +2,16 @@ require './test/test_helper'
 
 class MarkdownParserTest < MiniTest::Test
 
-  def setup
-    @markdown = MarkdownIO.read_markdown('./my_input.markdown')
-    @parser = MarkdownParser.new(@markdown)
+  #def setup
+    #@markdown = MarkdownIO.read_markdown('./my_input.markdown')
+    #@parser = MarkdownParser.new(@markdown)
 
-  end
+  #end
 
-  def test_parser_exists
-    @parser = MarkdownParser.new(@markdown)
-    assert @parser
-  end
+  #def test_parser_exists
+    #@parser = MarkdownParser.new(@markdown)
+    #assert @parser
+  #end
 
   def test_parser_can_convert_a_header
     header = '# Header'
@@ -49,20 +49,59 @@ class MarkdownParserTest < MiniTest::Test
   end
 
   def test_can_generate_unordered_list
-    uo_list = "My favorite cuisines are:\n\n* Sushi\n* Barbeque\n* Mexican"
+    uo_list = "* Sushi"
     parser = MarkdownParser.new(uo_list)
     unordered = parser.generate_unordered_list
 
-    uo_html = "<p>
-  My favorite cuisines are:
-</p>
-
-<ul>
+    uo_html = "<ul>
   <li>Sushi</li>
-  <li>Barbeque</li>
-  <li>Mexican</li>
 </ul>"
     assert_equal uo_html , unordered
-
   end
+
+  def test_can_generate_another_unordered_list
+    uo_list = "* Sushi\n* Barbeque"
+    parser = MarkdownParser.new(uo_list)
+    unordered = parser.generate_unordered_list
+
+    uo_html = "<ul>
+  <li>Sushi</li>
+  <li>Barbeque</li>
+</ul>"
+    assert_equal uo_html , unordered
+  end
+
+  def test_does_not_generate_unordered_list_on_empty_string
+    uo_list = ""
+    parser = MarkdownParser.new(uo_list)
+    unordered = parser.generate_unordered_list
+
+    uo_html = ""
+    assert_equal uo_html , unordered
+  end
+
+  def test_can_generate_unordered_list_with_convert_all
+    uo_list = "* Sushi\n* Barbeque"
+    parser = MarkdownParser.new(uo_list)
+    unordered = parser.convert_all
+
+    uo_html = "<ul>
+  <li>Sushi</li>
+  <li>Barbeque</li>
+</ul>"
+    assert_equal uo_html , unordered
+  end
+
+  def test_can_generate_ordered_list
+    o_list = "1. Sushi"
+    parser = MarkdownParser.new(o_list)
+    ordered = parser.generate_ordered_list
+
+    o_html = "<ol>
+  <li>Sushi</li>
+</ol>"
+    assert_equal o_html , ordered
+  end
+
+
 end

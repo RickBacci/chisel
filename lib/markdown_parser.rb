@@ -14,13 +14,13 @@ class MarkdownParser
   end
 
   def convert_all
-    @markdown = generate_paragraphs
+    #@markdown = generate_paragraphs
 
+    generate_unordered_list
     convert_headers if header_match_found?
     convert_strong if strong_match_found?
     convert_emphasis if emphasis_match_found?
     convert_ampersand if ampersand_match_found?
-
   end
 
   def convert_headers
@@ -34,7 +34,7 @@ class MarkdownParser
    end
 
   def convert_emphasis
-     @markdown = @markdown.gsub(/\*(.*)\*/, "<em>\\1</em>")
+     @markdown.gsub!(/\*(.*)\*/, "<em>\\1</em>")
   end
 
   def convert_strong
@@ -60,15 +60,19 @@ class MarkdownParser
   end
 
   def generate_unordered_list
-    "<p>
-  My favorite cuisines are:
-</p>
+    if @markdown.match(/^\* (.*)/).nil?
+      @markdown
+    else
+      @markdown = "<ul>\n" + @markdown.gsub(/^\* (.*)/, "  <li>\\1</li>") + "\n</ul>"
+    end
+  end
 
-<ul>
-  <li>Sushi</li>
-  <li>Barbeque</li>
-  <li>Mexican</li>
-</ul>"
+  def generate_ordered_list
+    if @markdown.match(/^\d+\. (.*)/).nil?
+      @markdown
+    else
+      @markdown = "<ol>\n" + @markdown.gsub(/^\d+\. (.*)/, "  <li>\\1</li>") + "\n</ol>"
+    end
   end
 
   private
